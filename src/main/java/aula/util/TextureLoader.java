@@ -19,6 +19,9 @@ public class TextureLoader {
     	
     	System.out.println(" "+image.getWidth() +" "+ image.getHeight());
 
+            // BufferedImage fornece pixels no formato ARGB inteiro; primeiro copiamos
+            // todos para um array Java e depois os reorganizamos como bytes RGBA,
+            // formato que será enviado ao OpenGL mais abaixo.
           int[] pixels = new int[image.getWidth() * image.getHeight()];
             image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
 
@@ -34,12 +37,16 @@ public class TextureLoader {
                 }
             }
 
+            // flip prepara o buffer para leitura: até aqui escrevemos pixels nele;
+            // agora o OpenGL precisa ler do início até o último byte preenchido.
             buffer.flip(); //FOR THE LOVE OF GOD DO NOT FORGET THIS
 
             // You now have a ByteBuffer filled with the color data of each pixel.
             // Now just create a texture ID and bind it. Then you can load it using 
             // whatever OpenGL method you want, for example:
 
+          // Cria um identificador OpenGL e o torna a textura ativa para configuração.
+          // O ID retornado é guardado por Main e vinculado antes de desenhar o modelo.
           int textureID = glGenTextures(); //Generate texture ID
             glBindTexture(GL_TEXTURE_2D, textureID); //Bind texture ID
 
@@ -51,6 +58,8 @@ public class TextureLoader {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+            // Envia os pixels para a GPU. A partir daí a imagem pode ser amostrada
+            // durante o desenho usando as coordenadas UV fornecidas pelo modelo.
             //Send texel data to OpenGL
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 
