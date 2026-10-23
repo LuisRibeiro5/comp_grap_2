@@ -39,16 +39,13 @@ public class TextureLoader {
 
             // flip prepara o buffer para leitura: até aqui escrevemos pixels nele;
             // agora o OpenGL precisa ler do início até o último byte preenchido.
-            buffer.flip(); //FOR THE LOVE OF GOD DO NOT FORGET THIS
-
-            // You now have a ByteBuffer filled with the color data of each pixel.
-            // Now just create a texture ID and bind it. Then you can load it using 
-            // whatever OpenGL method you want, for example:
+            buffer.flip();
 
           // Cria um identificador OpenGL e o torna a textura ativa para configuração.
           // O ID retornado é guardado por Main e vinculado antes de desenhar o modelo.
-          int textureID = glGenTextures(); //Generate texture ID
-            glBindTexture(GL_TEXTURE_2D, textureID); //Bind texture ID
+          int textureID = glGenTextures(); //gera ID da textura
+            glBindTexture(GL_TEXTURE_2D, textureID); //faz o Bind da textura para OpenGL,
+                                            // tornando-a ativa para configuração e envio de pixels
 
             //Setup wrap mode
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
@@ -61,9 +58,11 @@ public class TextureLoader {
             // Envia os pixels para a GPU. A partir daí a imagem pode ser amostrada
             // durante o desenho usando as coordenadas UV fornecidas pelo modelo.
             //Send texel data to OpenGL
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.getWidth(),
+                    image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 
-            //Return the texture ID so we can bind it later again
+            //retorne o id da textura para que possamos fazer o bind dela novamente mais tarde
+
           return textureID;
        }
 
@@ -72,7 +71,7 @@ public class TextureLoader {
             try {
                return ImageIO.read(new FileInputStream(loc));
             } catch (IOException e) {
-                //Error Handling Here
+                //tratamento de erros
             }
            return null;
        }

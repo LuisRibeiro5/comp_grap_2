@@ -142,6 +142,7 @@ public class Main {
 			System.out.println("Textura: " + texturePath
 					+ " | Controles: 1-9/SETAS selecionam animacao, ESPACO pausa, W wireframe, ESC sai.");
 
+			//operacoes do open gl para preparar o estado inicial
 			glEnable(GL_TEXTURE_2D);
 			glEnable(GL_LIGHTING);
 			glEnable(GL_LIGHT0);
